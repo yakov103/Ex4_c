@@ -8,7 +8,8 @@ void build_graph_cmd(pnode *head, int SIZE){
 
     pnode graph ;
     graph = *head;
-    graph = (node* ) realloc(graph, SIZE);
+    free(graph);
+    graph = (node*) malloc( sizeof (node)* SIZE);
     pnode currentNode = graph;
     for ( int i = 0 ; i < SIZE; i++){
         currentNode->node_num = i ;
@@ -53,7 +54,7 @@ void build_graph_cmd(pnode *head, int SIZE){
                 }
                 else {
                     menu = '\0';
-                    head = &graph;
+                    *head = graph;
                     break;
                 }
 
