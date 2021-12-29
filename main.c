@@ -34,6 +34,11 @@ int main() {
                 delete_node_cmd(&graph,size);
 
                 break;
+
+            case 'S':
+                shortsPath_cmd(graph,size);
+
+
             default:
                 break;
         }

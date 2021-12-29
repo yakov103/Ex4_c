@@ -2,6 +2,9 @@
 #include "graph.h"
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
+
+#define INFTY 10000
 
 //    A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 5 3 9 E
 char build_graph_cmd(pnode *head, int *ptrSize){
@@ -80,6 +83,7 @@ char build_graph_cmd(pnode *head, int *ptrSize){
 }
 
 //    A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 2 3 9 E
+//    A 4 n 0 1 1 2 2 n 2 0 0 1 1 n 1 3 3 0 0 n 3 B 5 3 3 E
 char insert_node_cmd(pnode *head, int *ptrSize){
     int size_g = *ptrSize;
 
@@ -205,7 +209,9 @@ void printGraph_cmd(pnode head, int *ptrSize){
         printf("id : %d  , edges :\n ", currNode->node_num);
         if ( currNode->edges != NULL) { // will be checked on printing
             currEdge = currNode->edges;
-            printf("direct to %d , weight is %d\n",currEdge->endpoint->node_num, currEdge->weight);
+            int direct = currEdge->endpoint->node_num;
+            int weight = currEdge->weight;
+            printf("direct to %d , weight is %d\n",direct, weight);
             while (currEdge->next != NULL) {
             currEdge = currEdge->next;
             printf("direct to %d , weight is %d\n",currEdge->endpoint->node_num, currEdge->weight);
@@ -271,6 +277,23 @@ void delete_node_cmd(pnode *head, int *ptrSize ){
     ptr_free_old_graph = NULL;
     *ptrSize = size_g;
     *head = new_graph_first;
+
+
+
+
+
+}
+//A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 n 3 S 0 2 E
+void shortsPath_cmd(pnode head, int *ptrSize){
+  int *dijkstra_matrix;
+  int size_g = *ptrSize;
+    dijkstra_matrix = (int*) malloc(sizeof (int)*size_g*size_g);
+    for ( int i = 0; i < size_g*size_g; i ++){
+        dijkstra_matrix[i]= INFTY;
+    }
+    pnode graph = head;
+    int *visited;
+    visited = (int*) calloc(size_g,sizeof (int));
 
 
 
