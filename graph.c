@@ -90,16 +90,46 @@ char insert_node_cmd(pnode *head, int *ptrSize){
     if (flag){
         curr = graph+savePos;
         currEdge = curr->edges;
-        tempEdge = currEdge;
-        while (tempEdge != NULL){
-            currEdge->next = NULL;
-            free(currEdge);
-            currEdge = NULL;
-            currEdge = tempEdge->next;
-            tempEdge = currEdge;
+
+        while (currEdge != NULL){
+            tempEdge= currEdge;
+            currEdge = currEdge ->next;
+            free(tempEdge);
         }
+        currEdge= NULL;
+        curr->edges = NULL;
+        scanf(" %c",&menu);
+        while (1){
+            if (isdigit(menu)) {
+                if (isFirst) {
+
+                    currEdge = (edge *) malloc(sizeof(edge));
+                    curr->edges = currEdge;
+                    currEdge->endpoint = (graph + (menu - '0'));
+                    scanf(" %d", &weight);
+                    currEdge->weight = weight;
+                    isFirst = 0 ;
+                }
+                else {
+                    pedge newEdge;
+                    newEdge = (edge *) malloc(sizeof(edge));
+                    currEdge->next = newEdge;
+                    newEdge->endpoint = (graph + (menu - '0'));
+                    scanf(" %d", &weight);
+                    newEdge->weight = weight;
+
+                }
+
+            }
+            else{
+                *head = graph;
+                *ptrSize = size_g;
+                return menu;
+            }
+            scanf(" %c",&menu);
 
 
+        }
 
 
     }
