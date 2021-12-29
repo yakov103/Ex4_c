@@ -452,7 +452,9 @@ void TSP_cmd(pnode head, int *ptrSize){
 
     }
 
-
+    if (min >= 5000){
+        min = -1;
+    }
     printf("%d",min);
 
 
