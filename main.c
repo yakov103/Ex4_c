@@ -36,9 +36,11 @@ int main() {
                 break;
 
             case 'S':
-                shortsPath_cmd(graph,size);
-
-
+               shortsPath_cmd(graph,size);
+               break;
+            case 'T':
+                TSP_cmd(graph,size);
+                break ;
             default:
                 break;
         }

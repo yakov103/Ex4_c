@@ -264,6 +264,7 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
 
 
 }
+char caer;
 
 //A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 n 3 S 0 2 E
 void shortsPath_cmd(pnode head, int *ptrSize) {
@@ -323,6 +324,86 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
         scanf(" %c", &dest);
         if (isdigit(dest)) {
             printf(" %d" ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')]);
+        }
+    }
+    printf("\n");
+
+
+}
+
+
+void TSP_cmd(pnode head, int *ptrSize){
+
+
+
+    int *dijkstra_matrix;
+    int size_g = *ptrSize;
+
+
+    char ** strings , *tempStr [30];
+    strings = malloc(size_g*size_g*sizeof (char*));
+
+
+
+
+    dijkstra_matrix = (int *) malloc(sizeof(int) * size_g * size_g);
+    for (int i = 0; i < size_g * size_g; i++) {
+        dijkstra_matrix[i] = INFTY;
+        strings[i]= (char*)calloc (30,sizeof (char));
+    }
+    pnode graph = head;
+    int *visited, counter = size_g, min = INT_MAX, k, node_iter, temp;
+    visited = (int *) calloc(size_g, sizeof(int));
+    pedge currEdge;
+    for (int i = 0; i < size_g; i++) {
+        visited[i] = 1;
+        counter--;
+        dijkstra_matrix[i * size_g + i] = 0;
+        currEdge = (graph + i)->edges;
+        while (currEdge != NULL) {
+            dijkstra_matrix[i * size_g + currEdge->endpoint->node_num] = currEdge->weight;
+            sprintf(strings[i * size_g + currEdge->endpoint->node_num], "%d", currEdge->endpoint->node_num);
+
+            currEdge = currEdge->next;
+        }
+
+        while (counter) {
+            min = INT_MAX;
+            for (k = 0; k < size_g; k++) {
+                if (dijkstra_matrix[i * size_g + k] < min) {
+                    if (visited[k] == 0) {
+                        node_iter = k;
+                        min = dijkstra_matrix[i * size_g + k];
+                    }
+                }
+            }
+            currEdge = (graph + node_iter)->edges;
+            while (currEdge != NULL) {
+                temp = currEdge->weight;
+                k = currEdge->endpoint->node_num;
+                if (dijkstra_matrix[i * size_g + k] > dijkstra_matrix[size_g * i + node_iter] + temp) {
+                    dijkstra_matrix[i * size_g + k] = dijkstra_matrix[size_g * i + node_iter] + temp;
+                    sprintf(strings[i * size_g + k],"%s_%d",strings[size_g * i + node_iter],k);
+                }
+                currEdge = currEdge->next;
+            }
+            counter--;
+            visited[node_iter] = 1;
+        }
+        free(visited);
+        visited = (int *) calloc(size_g, sizeof(int));
+        counter = size_g;
+
+    }
+
+    printf("\nDijsktra shortest path:");
+    char src;
+    char dest;
+    scanf(" %c", &src);
+    if (isdigit(src)) {
+        scanf(" %c", &dest);
+        if (isdigit(dest)) {
+            printf(" %d , %s ||" ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')],strings[(src-'0') * size_g + (dest-'0')]);
         }
     }
     printf("\n");
