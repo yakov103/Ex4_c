@@ -41,7 +41,7 @@ int main() {
 
     }
     printGraph_cmd(graph,size);
-
+    free(graph);
 
 
 

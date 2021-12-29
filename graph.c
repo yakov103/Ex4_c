@@ -19,10 +19,14 @@ char build_graph_cmd(pnode *head, int *ptrSize){
 
 
     char menu = 1;
-    int keyNode, weight, destNode;
+    int keyNode, weight, destNode, flag = 1 ;
     while (menu){
+        if (flag){
         scanf(" %c",&menu);
-
+            }
+        else {
+            flag = 1;
+        }
         switch (menu) {
             case 'n':
                 scanf(" %d", &keyNode);
@@ -30,10 +34,20 @@ char build_graph_cmd(pnode *head, int *ptrSize){
                 pedge currEdge;
                 currEdge = ( edge*) malloc(sizeof (edge));
                 currentNode->edges = currEdge;
-                scanf("%d",&destNode);
-                currEdge->endpoint = (graph+destNode);
-                scanf("%d",&weight);
-                currEdge->weight = weight;
+                scanf(" %c",&menu);
+                if (isdigit(menu)){
+                    destNode = menu - '0';
+                    currEdge->endpoint = (graph+destNode);
+                    scanf(" %d",&weight);
+                    currEdge->weight = weight;
+
+
+                }
+                else {
+                    flag = 0 ;
+                    currentNode ->edges = NULL;
+                    free(currEdge);
+                }
 
                 break;
             default:
@@ -220,7 +234,12 @@ void delete_node_cmd(pnode *head, int *ptrSize ){
         if (oldGraph->node_num != node_to_del){
             tempEdge = oldGraph->edges;
             if (tempEdge != NULL  && tempEdge->endpoint->node_num == node_to_del){
-                oldGraph->edges = tempEdge->next;
+                if (tempEdge->next == NULL){
+                    oldGraph->edges = NULL;
+                }
+                else {
+                    oldGraph->edges = tempEdge->next;
+                }
                 free(tempEdge);
             }
             else {
@@ -242,9 +261,9 @@ void delete_node_cmd(pnode *head, int *ptrSize ){
         }
         else {
             oldGraph++;
-            continue;
         }
-
+        prevEdge= NULL;
+        tempEdge= NULL;
 
 
     }
