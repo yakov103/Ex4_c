@@ -306,10 +306,11 @@ void shortsPath_cmd(pnode head, int *ptrSize){
             currEdge= currEdge->next;
         }
 
-        while (counter){
-            for ( k = 0 ; k < size_g ; k++){
-                if ( dijkstra_matrix[i*size_g+k] < min){
-                    if (visited[k] == 0 ){
+        while (counter) {
+            min = INT_MAX;
+            for (k = 0; k < size_g; k++) {
+                if (dijkstra_matrix[i * size_g + k] < min) {
+                    if (visited[k] == 0) {
                         node_iter = k;
                         min = dijkstra_matrix[i*size_g+k];
                     }
@@ -327,10 +328,25 @@ void shortsPath_cmd(pnode head, int *ptrSize){
         counter--;
             visited[node_iter]= 1;
         }
+        free(visited);
+        visited = (int *) calloc(size_g, sizeof(int));
+        counter = size_g;
 
     }
 
-
+    printf("\nDijsktra shortest path:");
+    char src;
+    char dest;
+    scanf(" %c", &src);
+    if (isdigit(src)) {
+        scanf(" %c", &dest);
+        if (isdigit(dest)) {
+            printf(" %d" ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')]);
+        }
+    }
+    printf("\n");
 
 
 }
+// A 4 n 0 1 6 2 2 3 1 n 2 0 1 1 5 n 3 1 1 n 1 S 2 1 E
+// A 3 n 0 2 2 1 4 n 2 1 1 n 1 E
