@@ -403,7 +403,7 @@ void TSP_cmd(pnode head, int *ptrSize){
     if (isdigit(src)) {
         scanf(" %c", &dest);
         if (isdigit(dest)) {
-            printf(" %d , %s ||" ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')],strings[(src-'0') * size_g + (dest-'0')]);
+            printf(" %d , %s" ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')],strings[(src-'0') * size_g + (dest-'0')]);
         }
     }
     printf("\n");
