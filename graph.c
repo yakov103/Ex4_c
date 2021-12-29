@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <limits.h>
 
 #define INFTY 10000
 
@@ -292,9 +293,42 @@ void shortsPath_cmd(pnode head, int *ptrSize){
         dijkstra_matrix[i]= INFTY;
     }
     pnode graph = head;
-    int *visited;
+    int *visited, counter = size_g , min =INT_MAX, k , node_iter, temp ;
     visited = (int*) calloc(size_g,sizeof (int));
+    pedge currEdge;
+    for ( int i = 0 ; i < size_g ; i++){
+        visited[i]= 1;
+        counter--;
+        dijkstra_matrix[i*size_g+i] = 0 ;
+        currEdge = (graph+i)->edges;
+        while (currEdge != NULL){
+            dijkstra_matrix[i*size_g+currEdge->endpoint->node_num] = currEdge->weight;
+            currEdge= currEdge->next;
+        }
 
+        while (counter){
+            for ( k = 0 ; k < size_g ; k++){
+                if ( dijkstra_matrix[i*size_g+k] < min){
+                    if (visited[k] == 0 ){
+                        node_iter = k;
+                        min = dijkstra_matrix[i*size_g+k];
+                    }
+                }
+            }
+            currEdge = (graph+node_iter)->edges;
+            while(currEdge != NULL){
+                temp = currEdge->weight;
+                k = currEdge->endpoint->node_num;
+                if (dijkstra_matrix[i*size_g + k] > dijkstra_matrix[size_g*i+node_iter]+temp ){
+                    dijkstra_matrix[i*size_g + k] = dijkstra_matrix[size_g*i+node_iter]+temp;
+                }
+            currEdge =currEdge->next;
+            }
+        counter--;
+            visited[node_iter]= 1;
+        }
+
+    }
 
 
 
