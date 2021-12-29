@@ -6,6 +6,15 @@
 #include <limits.h>
 
 #define INFTY 10000
+char *pstring="1234";
+int   plen;
+int *tsp_array;
+int **tsp_permutations;
+
+void permutatuion();
+void  perminit(char *s);    /* Initialize the poly counter array */
+int   permtick(void);        /* Advance to the next permutation */
+void buildperm(char *s);    /* Build current permutation from poly */
 
 //    A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 5 3 9 E
 char build_graph_cmd(pnode *head, int *ptrSize) {
@@ -75,7 +84,7 @@ char build_graph_cmd(pnode *head, int *ptrSize) {
         }
     }
 
-
+    return menu;
 }
 
 //    A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 2 3 9 E
@@ -331,6 +340,14 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
 
 }
 
+//A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 n 3 T 3 1 2 3 E
+int factorial (int n){
+    if ( n == 0 )return 1 ;
+    else {
+        return n * factorial(n-1);
+    }
+}
+
 
 void TSP_cmd(pnode head, int *ptrSize){
 
@@ -343,13 +360,13 @@ void TSP_cmd(pnode head, int *ptrSize){
     char ** strings , *tempStr [30];
     strings = malloc(size_g*size_g*sizeof (char*));
 
-
-
-
     dijkstra_matrix = (int *) malloc(sizeof(int) * size_g * size_g);
-    for (int i = 0; i < size_g * size_g; i++) {
-        dijkstra_matrix[i] = INFTY;
-        strings[i]= (char*)calloc (30,sizeof (char));
+    for (int i = 0; i < size_g; i++) {
+        for ( int j = 0 ; j < size_g ; j++ ) {
+            dijkstra_matrix[i*size_g+j] = INFTY;
+            strings[i*size_g+j] = (char *) calloc(30, sizeof(char));
+            sprintf(strings[i*size_g+j],"%d",i);
+        }
     }
     pnode graph = head;
     int *visited, counter = size_g, min = INT_MAX, k, node_iter, temp;
@@ -362,7 +379,7 @@ void TSP_cmd(pnode head, int *ptrSize){
         currEdge = (graph + i)->edges;
         while (currEdge != NULL) {
             dijkstra_matrix[i * size_g + currEdge->endpoint->node_num] = currEdge->weight;
-            sprintf(strings[i * size_g + currEdge->endpoint->node_num], "%d", currEdge->endpoint->node_num);
+            sprintf(strings[i * size_g + currEdge->endpoint->node_num], "%s_%d",strings[i * size_g + currEdge->endpoint->node_num] ,currEdge->endpoint->node_num);
 
             currEdge = currEdge->next;
         }
@@ -396,19 +413,164 @@ void TSP_cmd(pnode head, int *ptrSize){
 
     }
 
-    printf("\nDijsktra shortest path:");
-    char src;
-    char dest;
-    scanf(" %c", &src);
-    if (isdigit(src)) {
-        scanf(" %c", &dest);
-        if (isdigit(dest)) {
-            printf(" %d , %s" ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')],strings[(src-'0') * size_g + (dest-'0')]);
-        }
+    int timesToRun;
+    scanf(" %d",&timesToRun);
+
+    plen = timesToRun;
+    tsp_array = (int*) malloc(sizeof(int)*timesToRun);
+    for (int i = 0 ; i < timesToRun ; i++){
+        scanf(" %d",&tsp_array[i]);
     }
-    printf("\n");
+
+    int factorial_permutation = factorial(timesToRun);
+    tsp_permutations = malloc(sizeof(int*)*factorial_permutation);
+    for (int i =0 ; i < factorial_permutation ; i ++) {
+        tsp_permutations[i]= (int*)malloc (sizeof(int)* timesToRun);
+    }
+
+    int tempSwap ;
+    int plen = timesToRun;
+    pstring = (char*) calloc(plen+1,sizeof (char));
+    for (int i = 0 ; i < timesToRun ; i++){
+        pstring[i] = (int)tsp_array[i]+'0';
+    }
+    permutatuion();
+    min = INFTY;
+    int sum;
+    int *currArray, the_one,the_second;
+    for (int i = 0; i < factorial_permutation ; i++ ){
+        sum=0 ;
+        currArray = tsp_permutations[i];
+        for ( int j = 0; j < timesToRun-1 ; j++ ){
+           the_one = currArray[j];
+           the_second =  currArray[j+1];
+            sum+= dijkstra_matrix[the_one*size_g+the_second];
+        }
+        if ( sum < min){
+            min = sum;
+        }
+
+    }
+
+
+    printf("%d",min);
 
 
 }
+
+
+
+
 // A 4 n 0 1 6 2 2 3 1 n 2 0 1 1 5 n 3 1 1 n 1 S 2 1 E
 // A 3 n 0 2 2 1 4 n 2 1 1 n 1 E
+
+/* -- Permutation String -- */
+
+
+/* -- Declare functions used later -- */
+
+
+/* -- Global Variables -- */
+char *perm, *poly;
+int *permInt, *polyInt;
+int tempkey;
+/* -- -- MAIN -- -- */
+void permutatuion(){
+    tempkey = 0 ;
+    /* Main code */
+    printf("String: %s, %d chars\n\n",pstring,plen);
+
+    /* Initialize the poly counter */
+    perminit(pstring);
+
+    do {
+        /* Build current permutation from poly */
+        buildperm(pstring);
+
+
+        printf("Print from main loop: %s\n",perm);
+        for ( int i = 0 ; i < plen ; i++){
+            tsp_permutations[tempkey][i]= (int)perm[i]-'0';
+        }
+        tempkey++;
+
+        /* Do some real work */
+
+        /* The stack is lightweight because the entire
+        /* state is held in poly, and there is no need
+        /* for the function callback nonsense */
+
+        /* Permtick advances poly to the next permutation
+        /* and returns 0 when there are none left */
+
+    } while(permtick());
+}
+
+
+
+
+
+
+void perminit(char *s) {
+    /* We have moved the init code to an init function,
+    /* where it truly belongs */
+
+
+    perm=(char *)malloc((plen+1)*sizeof(char));
+    perm[plen]=0;
+
+    poly=(char *)malloc((plen+1)*sizeof(char));
+
+    /* poly is a byte array that we are going to use as a big counter */
+    int p;
+    for(p=0;p<plen;p++) poly[p]=0;
+}
+
+int permtick(void) {
+    /* Each time we call permtick, it increments our poly counter */
+
+    int ret=-1;   /* Return True by default */
+    int p=plen-2; /* Start at 2nd to last position */
+
+    while( p >= 0 ) {
+        /* Increment poly digit */
+        poly[p]++;
+
+        /* If poly digit exceeds plen-p, move to
+        /* the next digit and loop */
+        if(poly[p]>=(plen-p)) {
+            poly[p]=0;
+            p--;
+
+            /* FYI - this is why poly[plen-1] is always 0:
+            /* That's it's maximum value, which is why we
+            /* start at plen-2 */
+        } else {
+            p=-2;        /* Done looping */
+        }
+    }
+
+    /* All permutations have been calculated and p=-1 */
+    if(p==-1) ret=0;
+
+    return(ret);
+}
+
+
+void buildperm(char *s) {
+    /* Build a permutation from the poly counter */
+
+    char c;
+    int i;
+
+    /* Start with a fresh copy of the string */
+    for(i=0;i<plen;i++) perm[i]=s[i];
+
+    /* Swap digits based on each poly digit */
+    /* if poly[i]>0 then swap with the (i+nth) digit */
+    for(i=0;i<(plen-1);i++) if(poly[i]>0) {
+            c              =perm[i];
+            perm[i]        =perm[i+poly[i]];
+            perm[i+poly[i]]=c;
+        }
+}

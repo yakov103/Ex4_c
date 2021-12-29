@@ -24,4 +24,7 @@ void deleteGraph_cmd(pnode* head);
 void shortsPath_cmd(pnode head, int *ptrSize);
 void TSP_cmd(pnode head, int *ptrSize);
 
+
+
+
 #endif
