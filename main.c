@@ -21,14 +21,18 @@ int main() {
         }
         switch (menu) {
             case 'A':
-                scanf("%d",&num_of_vertices);
+                scanf(" %d",&num_of_vertices);
                 menu = build_graph_cmd(&graph,size);
 
                 flag = 0;
                 break;
             case 'B':
                menu = insert_node_cmd(&graph,size);
-                printGraph_cmd(graph,size);
+                flag = 0;
+                break;
+            case 'D':
+                delete_node_cmd(&graph,size);
+
                 break;
             default:
                 break;
@@ -36,6 +40,7 @@ int main() {
 
 
     }
+    printGraph_cmd(graph,size);
 
 
 

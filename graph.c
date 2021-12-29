@@ -204,3 +204,57 @@ void printGraph_cmd(pnode head, int *ptrSize){
 
 
 }
+// A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 5 3 9 D 2 E
+void delete_node_cmd(pnode *head, int *ptrSize ){
+    int size_g = *ptrSize, k = 0 ;
+    size_g--;
+    pnode newGraph;
+    newGraph = (node *) malloc(sizeof (node)*(size_g));
+    pnode oldGraph = *head;
+    pnode ptr_free_old_graph = *head;
+    pnode new_graph_first= newGraph;
+    int node_to_del;
+    scanf(" %d",&node_to_del);
+    pedge prevEdge ,tempEdge;
+    for ( int i = 0; i < size_g+1 ; i++){
+        if (oldGraph->node_num != node_to_del){
+            tempEdge = oldGraph->edges;
+            if (tempEdge != NULL  && tempEdge->endpoint->node_num == node_to_del){
+                oldGraph->edges = tempEdge->next;
+                free(tempEdge);
+            }
+            else {
+                while (tempEdge != NULL && tempEdge->endpoint->node_num != node_to_del){
+                    prevEdge = tempEdge;
+                    tempEdge = tempEdge->next;
+                }
+                if (tempEdge != NULL){
+                    prevEdge->next = tempEdge->next;
+                    free(tempEdge);
+                }
+            }
+
+            *newGraph = *oldGraph;
+            oldGraph++;
+            newGraph++;
+
+
+        }
+        else {
+            oldGraph++;
+            continue;
+        }
+
+
+
+    }
+    free(ptr_free_old_graph);
+    ptr_free_old_graph = NULL;
+    *ptrSize = size_g;
+    *head = new_graph_first;
+
+
+
+
+
+}
