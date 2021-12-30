@@ -16,15 +16,18 @@ typedef struct GRAPH_NODE_ {
     struct GRAPH_NODE_ *next;
 } node, *pnode;
 
-char build_graph_cmd(pnode *head, int *ptrSize, int first_graph );
-char insert_node_cmd(pnode *head, int *ptrSize );
-void delete_node_cmd(pnode *head, int *ptrSize );
+char build_graph_cmd(pnode *head, int *ptrSize, int first_graph);
+
+char insert_node_cmd(pnode *head, int *ptrSize);
+
+void delete_node_cmd(pnode *head, int *ptrSize);
+
 void printGraph_cmd(pnode head, int *ptrSize); //for self debug
-void deleteGraph_cmd(pnode* head);
+void deleteGraph_cmd(pnode *head);
+
 void shortsPath_cmd(pnode head, int *ptrSize);
+
 void TSP_cmd(pnode head, int *ptrSize);
-
-
 
 
 #endif

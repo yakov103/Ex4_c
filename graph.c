@@ -49,7 +49,7 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
         currentNode++;
     }
 
-
+    pedge newEdge = NULL;
     char menu = 1;
     int keyNode, weight, destNode, flag = 1;
     while (menu) {
@@ -82,8 +82,10 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
                 break;
             default:
                 if (isdigit(menu)) {
-                    pedge newEdge;
+
                     newEdge = (edge *) malloc(sizeof(edge));
+                    newEdge->next = NULL;
+                    newEdge->endpoint = NULL;
                     currEdge->next = newEdge;
                     currEdge = currEdge->next;
                     keyNode = menu - '0';
@@ -367,7 +369,7 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
         counter = size_g;
 
     }
-
+    free(visited);
     char src;
     char dest;
     scanf(" %c", &src);
@@ -389,7 +391,7 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
         }
     }
     printf("\n");
-
+    free(dijkstra_matrix);
 
 }
 
@@ -465,6 +467,7 @@ void TSP_cmd(pnode head, int *ptrSize){
         counter = size_g;
 
     }
+    free(visited);
 
     int timesToRun;
     scanf(" %d",&timesToRun);
