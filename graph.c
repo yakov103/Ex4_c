@@ -303,7 +303,15 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
         dijkstra_matrix[i * size_g + i] = 0;
         currEdge = (graph + i)->edges;
         while (currEdge != NULL) {
-            dijkstra_matrix[i * size_g + currEdge->endpoint->node_num] = currEdge->weight;
+            k = currEdge->endpoint->node_num;
+            for (int i = 0 ; i < size_g; i++ ){
+                if ( k == (graph+i)->node_num){
+                    k = i;
+                    break;
+                }
+            }
+
+            dijkstra_matrix[i * size_g + k] = currEdge->weight;
             currEdge = currEdge->next;
         }
 
@@ -321,6 +329,12 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
             while (currEdge != NULL) {
                 temp = currEdge->weight;
                 k = currEdge->endpoint->node_num;
+                for (int i = 0 ; i < size_g; i++ ){
+                    if ( k == (graph+i)->node_num){
+                        k = i;
+                        break;
+                    }
+                }
                 if (dijkstra_matrix[i * size_g + k] > dijkstra_matrix[size_g * i + node_iter] + temp) {
                     dijkstra_matrix[i * size_g + k] = dijkstra_matrix[size_g * i + node_iter] + temp;
                 }
@@ -341,7 +355,18 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
     if (isdigit(src)) {
         scanf(" %c", &dest);
         if (isdigit(dest)) {
-            printf("Dijsktra shortest path: %d " ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')]);
+            int first = src-'0';
+            int second = dest-'0';
+            for ( int i =0 ; i <size_g ; i++){
+              if (first == (graph+i)->node_num){
+                  first= i ;
+              }
+              if (second == (graph+i)->node_num){
+                  second= i ;
+              }
+
+            }
+            printf("Dijsktra shortest path: %d " ,dijkstra_matrix[first * size_g + second]);
         }
     }
     printf("\n");
@@ -387,8 +412,15 @@ void TSP_cmd(pnode head, int *ptrSize){
         dijkstra_matrix[i * size_g + i] = 0;
         currEdge = (graph + i)->edges;
         while (currEdge != NULL) {
-            dijkstra_matrix[i * size_g + currEdge->endpoint->node_num] = currEdge->weight;
-            sprintf(strings[i * size_g + currEdge->endpoint->node_num], "%s_%d",strings[i * size_g + currEdge->endpoint->node_num] ,currEdge->endpoint->node_num);
+            k = currEdge->endpoint->node_num;
+            for (int i = 0 ; i < size_g; i++ ){
+                if ( k == (graph+i)->node_num){
+                    k = i;
+                    break;
+                }
+            }
+            dijkstra_matrix[i * size_g + k] = currEdge->weight;
+            sprintf(strings[i * size_g + k], "%s_%d",strings[i * size_g + k] ,k);
 
             currEdge = currEdge->next;
         }
@@ -407,6 +439,12 @@ void TSP_cmd(pnode head, int *ptrSize){
             while (currEdge != NULL) {
                 temp = currEdge->weight;
                 k = currEdge->endpoint->node_num;
+                for (int i = 0 ; i < size_g; i++ ){
+                    if ( k == (graph+i)->node_num){
+                        k = i;
+                        break;
+                    }
+                }
                 if (dijkstra_matrix[i * size_g + k] > dijkstra_matrix[size_g * i + node_iter] + temp) {
                     dijkstra_matrix[i * size_g + k] = dijkstra_matrix[size_g * i + node_iter] + temp;
                     sprintf(strings[i * size_g + k],"%s_%d",strings[size_g * i + node_iter],k);
