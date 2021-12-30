@@ -17,14 +17,33 @@ int   permtick(void);
 void buildperm(char *s);
 
 //    A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 5 3 9 E
-char build_graph_cmd(pnode *head, int *ptrSize) {
-    int size_g = *ptrSize;
+char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
 
+
+
+    int size_g = *ptrSize;
     pnode graph;
     graph = *head;
+
+    if (!first_graph){
+        pedge edge_to_del ;
+        pedge temp_edge_to_del;
+        for (int i = 0 ; i < size_g ; i++){
+            edge_to_del = (graph+i)->edges;
+            while(edge_to_del != NULL){
+                temp_edge_to_del = edge_to_del;
+                edge_to_del = edge_to_del->next;
+                free(temp_edge_to_del);
+                temp_edge_to_del = NULL;
+            }
+        }
+
+    }
     free(graph);
     graph = (node *) malloc(sizeof(node) * size_g);
     pnode currentNode = graph;
+
+
     for (int i = 0; i < size_g; i++) {
         currentNode->node_num = i;
         currentNode++;
@@ -304,9 +323,9 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
         currEdge = (graph + i)->edges;
         while (currEdge != NULL) {
             k = currEdge->endpoint->node_num;
-            for (int i = 0 ; i < size_g; i++ ){
-                if ( k == (graph+i)->node_num){
-                    k = i;
+            for (int j = 0 ; j < size_g; j++ ){
+                if ( k == (graph+j)->node_num){
+                    k = j;
                     break;
                 }
             }
@@ -329,9 +348,9 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
             while (currEdge != NULL) {
                 temp = currEdge->weight;
                 k = currEdge->endpoint->node_num;
-                for (int i = 0 ; i < size_g; i++ ){
-                    if ( k == (graph+i)->node_num){
-                        k = i;
+                for (int j = 0 ; j < size_g; j++ ){
+                    if ( k == (graph+j)->node_num){
+                        k = j;
                         break;
                     }
                 }
@@ -402,9 +421,9 @@ void TSP_cmd(pnode head, int *ptrSize){
         currEdge = (graph + i)->edges;
         while (currEdge != NULL) {
             k = currEdge->endpoint->node_num;
-            for (int i = 0 ; i < size_g; i++ ){
-                if ( k == (graph+i)->node_num){
-                    k = i;
+            for (int j = 0 ; j < size_g; j++ ){
+                if ( k == (graph+j)->node_num){
+                    k = j;
                     break;
                 }
             }
@@ -415,11 +434,11 @@ void TSP_cmd(pnode head, int *ptrSize){
 
         while (counter) {
             min = INT_MAX;
-            for (k = 0; k < size_g; k++) {
-                if (dijkstra_matrix[i * size_g + k] < min) {
-                    if (visited[k] == 0) {
-                        node_iter = k;
-                        min = dijkstra_matrix[i * size_g + k];
+            for (int x = 0; x < size_g; x++) {
+                if (dijkstra_matrix[i * size_g + x] < min) {
+                    if (visited[x] == 0) {
+                        node_iter = x;
+                        min = dijkstra_matrix[i * size_g + x];
                     }
                 }
             }
@@ -427,9 +446,9 @@ void TSP_cmd(pnode head, int *ptrSize){
             while (currEdge != NULL) {
                 temp = currEdge->weight;
                 k = currEdge->endpoint->node_num;
-                for (int i = 0 ; i < size_g; i++ ){
-                    if ( k == (graph+i)->node_num){
-                        k = i;
+                for (int j = 0 ; j < size_g; j++ ){
+                    if ( k == (graph+j)->node_num){
+                        k = j;
                         break;
                     }
                 }
@@ -501,6 +520,7 @@ void TSP_cmd(pnode head, int *ptrSize){
     for (int i =0 ; i < factorial_permutation ; i ++) {
         free(tsp_permutations[i]);
     }
+    free(dijkstra_matrix);
     free(tsp_permutations);
 
 }

@@ -10,6 +10,7 @@ int main() {
     int num_of_vertices, flag = 1 ;
     int *size ;
     size = &num_of_vertices;
+    int first_graph = 1;
 
     char menu = 1;
     while (menu != 'E'){
@@ -22,8 +23,8 @@ int main() {
         switch (menu) {
             case 'A':
                 scanf(" %d",&num_of_vertices);
-                menu = build_graph_cmd(&graph,size);
-
+                menu = build_graph_cmd(&graph,size,first_graph);
+                first_graph = 0 ;
                 flag = 0;
                 break;
             case 'B':
