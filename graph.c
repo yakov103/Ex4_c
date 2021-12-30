@@ -385,22 +385,11 @@ int factorial (int n){
 
 void TSP_cmd(pnode head, int *ptrSize){
 
-
-
     int *dijkstra_matrix;
     int size_g = *ptrSize;
-
-
-    char ** strings , *tempStr [30];
-    strings = malloc(size_g*size_g*sizeof (char*));
-
     dijkstra_matrix = (int *) malloc(sizeof(int) * size_g * size_g);
-    for (int i = 0; i < size_g; i++) {
-        for ( int j = 0 ; j < size_g ; j++ ) {
-            dijkstra_matrix[i*size_g+j] = INFTY;
-            strings[i*size_g+j] = (char *) calloc(30, sizeof(char));
-            sprintf(strings[i*size_g+j],"%d",i);
-        }
+    for (int i = 0; i < size_g * size_g; i++) {
+        dijkstra_matrix[i] = INFTY;
     }
     pnode graph = head;
     int *visited, counter = size_g, min = INT_MAX, k, node_iter, temp;
@@ -419,9 +408,8 @@ void TSP_cmd(pnode head, int *ptrSize){
                     break;
                 }
             }
-            dijkstra_matrix[i * size_g + k] = currEdge->weight;
-            sprintf(strings[i * size_g + k], "%s_%d",strings[i * size_g + k] ,k);
 
+            dijkstra_matrix[i * size_g + k] = currEdge->weight;
             currEdge = currEdge->next;
         }
 
@@ -447,7 +435,6 @@ void TSP_cmd(pnode head, int *ptrSize){
                 }
                 if (dijkstra_matrix[i * size_g + k] > dijkstra_matrix[size_g * i + node_iter] + temp) {
                     dijkstra_matrix[i * size_g + k] = dijkstra_matrix[size_g * i + node_iter] + temp;
-                    sprintf(strings[i * size_g + k],"%s_%d",strings[size_g * i + node_iter],k);
                 }
                 currEdge = currEdge->next;
             }
