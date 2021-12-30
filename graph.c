@@ -119,6 +119,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
     pnode check = *head;
     pnode curr;
     pnode graph = *head;
+    pedge newEdge;
     pedge currEdge, tempEdge;
     for (int i = 0; i < size_g; i++) {
         check = graph + i;
@@ -192,6 +193,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
         curr->node_num = keyNode;
         pedge currEdge;
         scanf(" %c", &menu);
+
         while (1) {
             if (isdigit(menu)) {
                 if (isFirst) {
@@ -203,8 +205,10 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     currEdge->weight = weight;
                     isFirst = 0;
                 } else {
-                    pedge newEdge;
+
                     newEdge = (edge *) malloc(sizeof(edge));
+                    newEdge->next= NULL;
+                    newEdge->endpoint=NULL;
                     currEdge->next = newEdge;
                     newEdge->endpoint = (graph + (menu - '0'));
                     scanf(" %d", &weight);
@@ -523,8 +527,11 @@ void TSP_cmd(pnode head, int *ptrSize){
     for (int i =0 ; i < factorial_permutation ; i ++) {
         free(tsp_permutations[i]);
     }
+    free(tsp_array);
+    free(pstring);
     free(dijkstra_matrix);
     free(tsp_permutations);
+
 
 }
 
@@ -617,7 +624,8 @@ int permtick(void) {
 
     // All permutations have been calculated and p=-1 
     if(p==-1) ret=0;
-
+    free(poly);
+    free(perm);
     return(ret);
 }
 
