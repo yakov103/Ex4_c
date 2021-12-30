@@ -258,8 +258,8 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
     pnode newGraph;
     newGraph = (node *) malloc(sizeof(node) * (size_g));
     pnode oldGraph = *head;
-    pnode ptr_free_old_graph = *head;
-    pnode new_graph_first = newGraph;
+
+
     pnode node_to_copy;
     int node_to_del  ;
     scanf(" %d", &node_to_del);
@@ -488,7 +488,7 @@ void TSP_cmd(pnode head, int *ptrSize){
         tsp_permutations[i]= (int*)malloc (sizeof(int)* timesToRun);
     }
 
-    int tempSwap ;
+    
 
     pstring = (char*) calloc(plen+1,sizeof (char));
     for (int i = 0 ; i < timesToRun ; i++){
@@ -556,14 +556,14 @@ void permutatuion(){
         }
         tempkey++;
 
-        /* Do some real work */
+        // Do some real work 
 
-        /* The stack is lightweight because the entire
-        /* state is held in poly, and there is no need
-        /* for the function callback nonsense */
+        // The stack is lightweight because the entire
+        // state is held in poly, and there is no need
+        // for the function callback nonsense 
 
-        /* Permtick advances poly to the next permutation
-        /* and returns 0 when there are none left */
+        // Permtick advances poly to the next permutation
+        // and returns 0 when there are none left 
 
     } while(permtick());
 }
@@ -574,8 +574,8 @@ void permutatuion(){
 
 
 void perminit(char *s) {
-    /* We have moved the init code to an init function,
-    /* where it truly belongs */
+    // We have moved the init code to an init function,
+    // where it truly belongs 
 
 
     perm=(char *)malloc((plen+1)*sizeof(char));
@@ -583,36 +583,36 @@ void perminit(char *s) {
 
     poly=(char *)malloc((plen+1)*sizeof(char));
 
-    /* poly is a byte array that we are going to use as a big counter */
+    // poly is a byte array that we are going to use as a big counter 
     int p;
     for(p=0;p<plen;p++) poly[p]=0;
 }
 
 int permtick(void) {
-    /* Each time we call permtick, it increments our poly counter */
+    // Each time we call permtick, it increments our poly counter 
 
-    int ret=-1;   /* Return True by default */
-    int p=plen-2; /* Start at 2nd to last position */
+    int ret=-1;   // Return True by default 
+    int p=plen-2; // Start at 2nd to last position 
 
     while( p >= 0 ) {
-        /* Increment poly digit */
+        // Increment poly digit 
         poly[p]++;
 
-        /* If poly digit exceeds plen-p, move to
-        /* the next digit and loop */
+        // If poly digit exceeds plen-p, move to
+        // the next digit and loop 
         if(poly[p]>=(plen-p)) {
             poly[p]=0;
             p--;
 
-            /* FYI - this is why poly[plen-1] is always 0:
-            /* That's it's maximum value, which is why we
-            /* start at plen-2 */
+            // FYI - this is why poly[plen-1] is always 0:
+            // That's it's maximum value, which is why we
+            // start at plen-2 
         } else {
-            p=-2;        /* Done looping */
+            p=-2;        // Done looping 
         }
     }
 
-    /* All permutations have been calculated and p=-1 */
+    // All permutations have been calculated and p=-1 
     if(p==-1) ret=0;
 
     return(ret);
@@ -620,16 +620,16 @@ int permtick(void) {
 
 
 void buildperm(char *s) {
-    /* Build a permutation from the poly counter */
+    // Build a permutation from the poly counter 
 
     char c;
     int i;
 
-    /* Start with a fresh copy of the string */
+    // Start with a fresh copy of the string 
     for(i=0;i<plen;i++) perm[i]=s[i];
 
-    /* Swap digits based on each poly digit */
-    /* if poly[i]>0 then swap with the (i+nth) digit */
+    // Swap digits based on each poly digit 
+    // if poly[i]>0 then swap with the (i+nth) digit 
     for(i=0;i<(plen-1);i++) if(poly[i]>0) {
             c              =perm[i];
             perm[i]        =perm[i+poly[i]];

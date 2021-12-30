@@ -48,7 +48,7 @@ int main() {
 
 
     }
-    printGraph_cmd(graph,size);
+    // printGraph_cmd(graph,size);
     free(graph);
 
 
