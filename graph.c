@@ -7,7 +7,7 @@
 
 #define INFTY 10000
 char *pstring="1234";
-int   plen;
+int plen;
 int *tsp_array;
 int **tsp_permutations;
 
@@ -149,6 +149,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     newEdge->endpoint = (graph + savePos);
                     scanf(" %d", &weight);
                     newEdge->weight = weight;
+                    newEdge->next=NULL;
 
                 }
 
@@ -240,17 +241,19 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
     pnode oldGraph = *head;
     pnode ptr_free_old_graph = *head;
     pnode new_graph_first = newGraph;
-    int node_to_del;
+    pnode node_to_copy;
+    int node_to_del  ;
     scanf(" %d", &node_to_del);
     pedge prevEdge, tempEdge;
     for (int i = 0; i < size_g + 1; i++) {
-        if (oldGraph->node_num != node_to_del) {
-            tempEdge = oldGraph->edges;
+        node_to_copy = oldGraph+i;
+        if (node_to_copy->node_num != node_to_del) {
+            tempEdge = node_to_copy->edges;
             if (tempEdge != NULL && tempEdge->endpoint->node_num == node_to_del) {
                 if (tempEdge->next == NULL) {
-                    oldGraph->edges = NULL;
+                    node_to_copy->edges = NULL;
                 } else {
-                    oldGraph->edges = tempEdge->next;
+                    node_to_copy->edges = tempEdge->next;
                 }
                 free(tempEdge);
             } else {
@@ -264,23 +267,19 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
                 }
             }
 
-            *newGraph = *oldGraph;
-            oldGraph++;
-            newGraph++;
+            newGraph[k] = *node_to_copy;
+           k++;
 
 
         } else {
-            oldGraph++;
+            continue;
         }
-        prevEdge = NULL;
-        tempEdge = NULL;
 
 
     }
-    free(ptr_free_old_graph);
-    ptr_free_old_graph = NULL;
+
     *ptrSize = size_g;
-    *head = new_graph_first;
+    *head = newGraph;
 
 
 }
@@ -425,11 +424,19 @@ void TSP_cmd(pnode head, int *ptrSize){
 
     int timesToRun;
     scanf(" %d",&timesToRun);
-
-    plen = timesToRun;
+    int *ptr;
+    ptr = &plen;
+    *ptr = timesToRun;
     tsp_array = (int*) malloc(sizeof(int)*timesToRun);
     for (int i = 0 ; i < timesToRun ; i++){
         scanf(" %d",&tsp_array[i]);
+        for ( int j = 0 ; j < size_g ; j++){
+            if (tsp_array[i] == (graph+j)->node_num){
+                tsp_array[i] = (graph+j)->node_num;
+                break;
+            }
+
+        }
     }
 
     int factorial_permutation = factorial(timesToRun);
