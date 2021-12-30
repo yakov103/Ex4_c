@@ -12,9 +12,9 @@ int *tsp_array;
 int **tsp_permutations;
 
 void permutatuion();
-void  perminit(char *s);    /* Initialize the poly counter array */
-int   permtick(void);        /* Advance to the next permutation */
-void buildperm(char *s);    /* Build current permutation from poly */
+void  perminit(char *s);
+int   permtick(void);
+void buildperm(char *s);
 
 //    A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 5 3 9 E
 char build_graph_cmd(pnode *head, int *ptrSize) {
@@ -136,7 +136,17 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     pedge newEdge;
                     newEdge = (edge *) malloc(sizeof(edge));
                     currEdge->next = newEdge;
-                    newEdge->endpoint = (graph + (menu - '0'));
+
+                    for (int i = 0; i < size_g; i++) {
+                        check = graph + i;
+                        if (check->node_num == (menu - '0')) {
+                            savePos = i;
+                            break;
+                        }
+
+                    }
+
+                    newEdge->endpoint = (graph + savePos);
                     scanf(" %d", &weight);
                     newEdge->weight = weight;
 
@@ -197,6 +207,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 }
 
 void printGraph_cmd(pnode head, int *ptrSize) {
+    printf("\n");
     int size_g = *ptrSize;
     pnode currNode;
     pedge currEdge;
@@ -325,14 +336,13 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
 
     }
 
-    printf("\nDijsktra shortest path:");
     char src;
     char dest;
     scanf(" %c", &src);
     if (isdigit(src)) {
         scanf(" %c", &dest);
         if (isdigit(dest)) {
-            printf(" %d" ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')]);
+            printf("Dijsktra shortest path: %d " ,dijkstra_matrix[(src-'0') * size_g + (dest-'0')]);
         }
     }
     printf("\n");
@@ -455,8 +465,12 @@ void TSP_cmd(pnode head, int *ptrSize){
     if (min >= 5000){
         min = -1;
     }
-    printf("%d",min);
+    printf("TSP shortest path: %d \n",min);
 
+    for (int i =0 ; i < factorial_permutation ; i ++) {
+        free(tsp_permutations[i]);
+    }
+    free(tsp_permutations);
 
 }
 
@@ -479,18 +493,13 @@ int tempkey;
 /* -- -- MAIN -- -- */
 void permutatuion(){
     tempkey = 0 ;
-    /* Main code */
-    printf("String: %s, %d chars\n\n",pstring,plen);
 
-    /* Initialize the poly counter */
     perminit(pstring);
 
     do {
         /* Build current permutation from poly */
         buildperm(pstring);
 
-
-        printf("Print from main loop: %s\n",perm);
         for ( int i = 0 ; i < plen ; i++){
             tsp_permutations[tempkey][i]= (int)perm[i]-'0';
         }
