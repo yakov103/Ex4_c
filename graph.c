@@ -7,7 +7,7 @@
 
 #define INFTY 10000
 char *pstring="1234";
-int plen;
+int   plen;
 int *tsp_array;
 int **tsp_permutations;
 
@@ -424,15 +424,14 @@ void TSP_cmd(pnode head, int *ptrSize){
 
     int timesToRun;
     scanf(" %d",&timesToRun);
-    int *ptr;
-    ptr = &plen;
-    *ptr = timesToRun;
+
+    plen = timesToRun;
     tsp_array = (int*) malloc(sizeof(int)*timesToRun);
     for (int i = 0 ; i < timesToRun ; i++){
         scanf(" %d",&tsp_array[i]);
         for ( int j = 0 ; j < size_g ; j++){
             if (tsp_array[i] == (graph+j)->node_num){
-                tsp_array[i] = (graph+j)->node_num;
+                tsp_array[i] = j;
                 break;
             }
 
@@ -446,7 +445,7 @@ void TSP_cmd(pnode head, int *ptrSize){
     }
 
     int tempSwap ;
-    int plen = timesToRun;
+
     pstring = (char*) calloc(plen+1,sizeof (char));
     for (int i = 0 ; i < timesToRun ; i++){
         pstring[i] = (int)tsp_array[i]+'0';
