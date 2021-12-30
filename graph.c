@@ -10,6 +10,9 @@ char *pstring="1234";
 int   plen;
 int *tsp_array;
 int **tsp_permutations;
+char *perm, *poly;
+int *permInt, *polyInt;
+int tempkey;
 
 void permutatuion();
 void  perminit(char *s);
@@ -121,6 +124,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
     pnode graph = *head;
     pedge newEdge;
     pedge currEdge, tempEdge;
+
     for (int i = 0; i < size_g; i++) {
         check = graph + i;
         if (check->node_num == keyNode) {
@@ -189,6 +193,11 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
     } else {
 
         graph = (node *) realloc(graph, sizeof(node) * size_g + 1);
+        if (graph == NULL){
+            printf("failed to alocate memorty");
+            return 'E';
+        }
+
         curr = graph + size_g;
         curr->node_num = keyNode;
         pedge currEdge;
@@ -502,6 +511,8 @@ void TSP_cmd(pnode head, int *ptrSize){
         pstring[i] = (int)tsp_array[i]+'0';
     }
     permutatuion();
+    free(poly);
+    free(perm);
     min = INFTY;
     int sum;
     int *currArray, the_one,the_second;
@@ -548,9 +559,7 @@ void TSP_cmd(pnode head, int *ptrSize){
 
 
 /* -- Global Variables -- */
-char *perm, *poly;
-int *permInt, *polyInt;
-int tempkey;
+
 /* -- -- MAIN -- -- */
 void permutatuion(){
     tempkey = 0 ;
@@ -624,8 +633,6 @@ int permtick(void) {
 
     // All permutations have been calculated and p=-1 
     if(p==-1) ret=0;
-    free(poly);
-    free(perm);
     return(ret);
 }
 
