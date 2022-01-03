@@ -46,7 +46,7 @@ int main() {
 
 
     }
-    // printGraph_cmd(graph,size);
+     printGraph_cmd(graph,size);
     pedge currEdge;
     pedge tempEdge;
     for (int z = 0; z < num_of_vertices; z++) {

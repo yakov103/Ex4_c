@@ -42,7 +42,7 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
 
     }
     free(graph);
-    graph = (node *) malloc(sizeof(node) * size_g);
+    graph = (node *) malloc(sizeof(node) * 300);
     pnode currentNode = graph;
 
 
@@ -190,7 +190,6 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
     } else {
 
-        graph = (node *) realloc(graph, sizeof(node) * size_g + 1);
         curr = graph + size_g;
         curr->node_num = keyNode;
         pedge currEdge;
@@ -264,7 +263,7 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
     int size_g = *ptrSize, k = 0;
     size_g--;
     pnode newGraph;
-    newGraph = (node *) malloc(sizeof(node) * (size_g));
+    newGraph = (node *) malloc(sizeof(node) * 300);
     pnode oldGraph = *head;
 
 
@@ -307,6 +306,7 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
 
     *ptrSize = size_g;
     *head = newGraph;
+
 
 
 }
