@@ -30,13 +30,12 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
     if (!first_graph){
         pedge edge_to_del ;
         pedge temp_edge_to_del;
-        for (int i = 0 ; i < size_g ; i++){
+        for (int i = 0 ; i < size_g+1 ; i++){
             edge_to_del = (graph+i)->edges;
             while(edge_to_del != NULL){
                 temp_edge_to_del = edge_to_del;
                 edge_to_del = edge_to_del->next;
                 free(temp_edge_to_del);
-                temp_edge_to_del = NULL;
             }
         }
 
