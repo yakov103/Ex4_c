@@ -58,7 +58,7 @@ int main() {
 
 
     }
-    printf(graph);
+
     pedge currEdge;
     pedge tempEdge;
 
