@@ -10,7 +10,9 @@ char *pstring="1234";
 int   plen;
 int *tsp_array;
 int **tsp_permutations;
-
+char *perm, *poly;
+int *permInt, *polyInt;
+int tempkey;
 void permutatuion();
 void  perminit(char *s);
 int   permtick(void);
@@ -28,19 +30,18 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
     if (!first_graph){
         pedge edge_to_del ;
         pedge temp_edge_to_del;
-        for (int i = 0 ; i < size_g ; i++){
+        for (int i = 0 ; i < size_g+1 ; i++){
             edge_to_del = (graph+i)->edges;
             while(edge_to_del != NULL){
                 temp_edge_to_del = edge_to_del;
                 edge_to_del = edge_to_del->next;
                 free(temp_edge_to_del);
-                temp_edge_to_del = NULL;
             }
         }
 
     }
     free(graph);
-    graph = (node *) malloc(sizeof(node) * size_g);
+    graph = (node *) malloc(sizeof(node) * 300);
     pnode currentNode = graph;
 
 
@@ -49,7 +50,7 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
         currentNode++;
     }
 
-
+    pedge newEdge = NULL;
     char menu = 1;
     int keyNode, weight, destNode, flag = 1;
     while (menu) {
@@ -82,8 +83,10 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
                 break;
             default:
                 if (isdigit(menu)) {
-                    pedge newEdge;
+
                     newEdge = (edge *) malloc(sizeof(edge));
+                    newEdge->next = NULL;
+                    newEdge->endpoint = NULL;
                     currEdge->next = newEdge;
                     currEdge = currEdge->next;
                     keyNode = menu - '0';
@@ -116,10 +119,10 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
     scanf("%d", &keyNode);
     pnode check = *head;
     pnode curr;
-    pnode graph = *head;
+    pedge newEdge;
     pedge currEdge, tempEdge;
     for (int i = 0; i < size_g; i++) {
-        check = graph + i;
+        check = *head + i;
         if (check->node_num == keyNode) {
             savePos = i;
             flag = 1;
@@ -130,7 +133,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
 
     if (flag) {
-        curr = graph + savePos;
+        curr = *head + savePos;
         currEdge = curr->edges;
 
         while (currEdge != NULL) {
@@ -147,7 +150,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
                     currEdge = (edge *) malloc(sizeof(edge));
                     curr->edges = currEdge;
-                    currEdge->endpoint = (graph + (menu - '0'));
+                    currEdge->endpoint = (*head + (menu - '0'));
                     scanf(" %d", &weight);
                     currEdge->weight = weight;
                     isFirst = 0;
@@ -157,7 +160,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     currEdge->next = newEdge;
 
                     for (int i = 0; i < size_g; i++) {
-                        check = graph + i;
+                        check = *head + i;
                         if (check->node_num == (menu - '0')) {
                             savePos = i;
                             break;
@@ -165,7 +168,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
                     }
 
-                    newEdge->endpoint = (graph + savePos);
+                    newEdge->endpoint = (*head + savePos);
                     scanf(" %d", &weight);
                     newEdge->weight = weight;
                     newEdge->next=NULL;
@@ -173,7 +176,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                 }
 
             } else {
-                *head = graph;
+                *head = *head;
                 *ptrSize = size_g;
                 return menu;
             }
@@ -185,33 +188,35 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
     } else {
 
-        graph = (node *) realloc(graph, sizeof(node) * size_g + 1);
-        curr = graph + size_g;
+        curr = *head + size_g;
         curr->node_num = keyNode;
         pedge currEdge;
         scanf(" %c", &menu);
+
         while (1) {
             if (isdigit(menu)) {
                 if (isFirst) {
 
                     currEdge = (edge *) malloc(sizeof(edge));
                     curr->edges = currEdge;
-                    currEdge->endpoint = (graph + (menu - '0'));
+                    currEdge->endpoint = (*head + (menu - '0'));
                     scanf(" %d", &weight);
                     currEdge->weight = weight;
                     isFirst = 0;
                 } else {
-                    pedge newEdge;
+
                     newEdge = (edge *) malloc(sizeof(edge));
+                    newEdge->next= NULL;
+                    newEdge->endpoint=NULL;
                     currEdge->next = newEdge;
-                    newEdge->endpoint = (graph + (menu - '0'));
+                    newEdge->endpoint = (*head + (menu - '0'));
                     scanf(" %d", &weight);
                     newEdge->weight = weight;
 
                 }
 
             } else {
-                *head = graph;
+                *head = *head;
                 *ptrSize = size_g + 1;
                 return menu;
             }
@@ -252,14 +257,14 @@ void printGraph_cmd(pnode head, int *ptrSize) {
 }
 
 // A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 5 3 9 D 2 E
-void delete_node_cmd(pnode *head, int *ptrSize) {
+pnode delete_node_cmd(pnode *head, int *ptrSize) {
     int size_g = *ptrSize, k = 0;
     size_g--;
     pnode newGraph;
-    newGraph = (node *) malloc(sizeof(node) * (size_g));
+    newGraph = (node *) malloc(sizeof(node) *300);
     pnode oldGraph = *head;
-    pnode ptr_free_old_graph = *head;
-    pnode new_graph_first = newGraph;
+    pnode save_start_of_old = *head;
+    pedge currEdge;
     pnode node_to_copy;
     int node_to_del  ;
     scanf(" %d", &node_to_del);
@@ -285,12 +290,19 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
                     free(tempEdge);
                 }
             }
-
             newGraph[k] = *node_to_copy;
-           k++;
+            newGraph[k].node_num =node_to_copy->node_num;
+            newGraph[k].edges =node_to_copy->edges;
+            k++;
 
 
         } else {
+            currEdge = oldGraph[k].edges;
+            while (currEdge != NULL) {
+                tempEdge = currEdge;
+                currEdge = currEdge->next;
+                free(tempEdge);
+            }
             continue;
         }
 
@@ -299,6 +311,8 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
 
     *ptrSize = size_g;
     *head = newGraph;
+    return oldGraph;
+
 
 
 }
@@ -367,7 +381,7 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
         counter = size_g;
 
     }
-
+    free(visited);
     char src;
     char dest;
     scanf(" %c", &src);
@@ -389,7 +403,7 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
         }
     }
     printf("\n");
-
+    free(dijkstra_matrix);
 
 }
 
@@ -465,6 +479,7 @@ void TSP_cmd(pnode head, int *ptrSize){
         counter = size_g;
 
     }
+    free(visited);
 
     int timesToRun;
     scanf(" %d",&timesToRun);
@@ -488,13 +503,16 @@ void TSP_cmd(pnode head, int *ptrSize){
         tsp_permutations[i]= (int*)malloc (sizeof(int)* timesToRun);
     }
 
-    int tempSwap ;
+    
 
     pstring = (char*) calloc(plen+1,sizeof (char));
     for (int i = 0 ; i < timesToRun ; i++){
         pstring[i] = (int)tsp_array[i]+'0';
     }
     permutatuion();
+    free(poly);
+    free(perm);
+
     min = INFTY;
     int sum;
     int *currArray, the_one,the_second;
@@ -520,8 +538,11 @@ void TSP_cmd(pnode head, int *ptrSize){
     for (int i =0 ; i < factorial_permutation ; i ++) {
         free(tsp_permutations[i]);
     }
+    free(tsp_array);
+    free(pstring);
     free(dijkstra_matrix);
     free(tsp_permutations);
+
 
 }
 
@@ -538,9 +559,7 @@ void TSP_cmd(pnode head, int *ptrSize){
 
 
 /* -- Global Variables -- */
-char *perm, *poly;
-int *permInt, *polyInt;
-int tempkey;
+
 /* -- -- MAIN -- -- */
 void permutatuion(){
     tempkey = 0 ;
@@ -556,14 +575,14 @@ void permutatuion(){
         }
         tempkey++;
 
-        /* Do some real work */
+        // Do some real work 
 
-        /* The stack is lightweight because the entire
-        /* state is held in poly, and there is no need
-        /* for the function callback nonsense */
+        // The stack is lightweight because the entire
+        // state is held in poly, and there is no need
+        // for the function callback nonsense 
 
-        /* Permtick advances poly to the next permutation
-        /* and returns 0 when there are none left */
+        // Permtick advances poly to the next permutation
+        // and returns 0 when there are none left 
 
     } while(permtick());
 }
@@ -574,45 +593,44 @@ void permutatuion(){
 
 
 void perminit(char *s) {
-    /* We have moved the init code to an init function,
-    /* where it truly belongs */
-
+    // We have moved the init code to an init function,
+    // where it truly belongs 
 
     perm=(char *)malloc((plen+1)*sizeof(char));
     perm[plen]=0;
 
     poly=(char *)malloc((plen+1)*sizeof(char));
 
-    /* poly is a byte array that we are going to use as a big counter */
+    // poly is a byte array that we are going to use as a big counter 
     int p;
     for(p=0;p<plen;p++) poly[p]=0;
 }
 
 int permtick(void) {
-    /* Each time we call permtick, it increments our poly counter */
+    // Each time we call permtick, it increments our poly counter 
 
-    int ret=-1;   /* Return True by default */
-    int p=plen-2; /* Start at 2nd to last position */
+    int ret=-1;   // Return True by default 
+    int p=plen-2; // Start at 2nd to last position 
 
     while( p >= 0 ) {
-        /* Increment poly digit */
+        // Increment poly digit 
         poly[p]++;
 
-        /* If poly digit exceeds plen-p, move to
-        /* the next digit and loop */
+        // If poly digit exceeds plen-p, move to
+        // the next digit and loop 
         if(poly[p]>=(plen-p)) {
             poly[p]=0;
             p--;
 
-            /* FYI - this is why poly[plen-1] is always 0:
-            /* That's it's maximum value, which is why we
-            /* start at plen-2 */
+            // FYI - this is why poly[plen-1] is always 0:
+            // That's it's maximum value, which is why we
+            // start at plen-2 
         } else {
-            p=-2;        /* Done looping */
+            p=-2;        // Done looping 
         }
     }
 
-    /* All permutations have been calculated and p=-1 */
+    // All permutations have been calculated and p=-1 
     if(p==-1) ret=0;
 
     return(ret);
@@ -620,16 +638,16 @@ int permtick(void) {
 
 
 void buildperm(char *s) {
-    /* Build a permutation from the poly counter */
+    // Build a permutation from the poly counter 
 
     char c;
     int i;
 
-    /* Start with a fresh copy of the string */
+    // Start with a fresh copy of the string 
     for(i=0;i<plen;i++) perm[i]=s[i];
 
-    /* Swap digits based on each poly digit */
-    /* if poly[i]>0 then swap with the (i+nth) digit */
+    // Swap digits based on each poly digit 
+    // if poly[i]>0 then swap with the (i+nth) digit 
     for(i=0;i<(plen-1);i++) if(poly[i]>0) {
             c              =perm[i];
             perm[i]        =perm[i+poly[i]];
