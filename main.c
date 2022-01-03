@@ -24,6 +24,9 @@ int main() {
             }
         } else {
             flag = 1;
+            if (menu == EOF || menu == '\n'|| menu == '\0'){
+                break;
+            }
         }
         switch (menu) {
             case 'A':
@@ -55,7 +58,7 @@ int main() {
 
 
     }
-
+    printf(graph);
     pedge currEdge;
     pedge tempEdge;
 

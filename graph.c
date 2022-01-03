@@ -56,12 +56,16 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
     while (menu) {
         if (flag) {
             scanf(" %c", &menu);
+            if (menu == ' '){
+                scanf(" %c", &menu);
+                printf("test");
+            }
         } else {
             flag = 1;
         }
         switch (menu) {
             case 'n':
-                scanf(" %d", &keyNode);
+                scanf("%d", &keyNode);
                 currentNode = (graph + keyNode);
                 pedge currEdge;
                 currEdge = (edge *) malloc(sizeof(edge));
@@ -70,7 +74,7 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
                 if (isdigit(menu)) {
                     destNode = menu - '0';
                     currEdge->endpoint = (graph + destNode);
-                    scanf(" %d", &weight);
+                    scanf("%d", &weight);
                     currEdge->weight = weight;
 
 
@@ -91,7 +95,8 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
                     currEdge = currEdge->next;
                     keyNode = menu - '0';
                     currEdge->endpoint = (graph + keyNode);
-                    scanf("%d", &weight);
+                    scanf(" %c", &menu);
+                    weight = menu-'0';
                     currEdge->weight = weight;
 
 
