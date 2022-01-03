@@ -15,18 +15,23 @@ int main() {
     arr= (pnode*)malloc(sizeof (pnode)*20);
     pnode to_delete =NULL;
     char menu = 1;
-    while (menu != EOF) {
+
+    while (menu != EOF || menu != '\n' || menu != '\0') {
         if (flag) {
-            scanf(" %c", &menu);
+            scanf("%c", &menu);
+            if (menu == EOF || menu == '\n'|| menu == '\0'){
+           break;
+            }
         } else {
             flag = 1;
+            if (menu == EOF || menu == '\n'|| menu == '\0'){
+                break;
+            }
         }
         switch (menu) {
             case 'A':
-                scanf(" %d", &num_of_vertices);
-                if (!first_graph){
+                scanf("%d", &num_of_vertices);
 
-                }
                 menu = build_graph_cmd(&graph, size, first_graph);
                 first_graph = 0;
                 flag = 0;
@@ -53,7 +58,7 @@ int main() {
 
 
     }
-
+    printf(graph);
     pedge currEdge;
     pedge tempEdge;
 
