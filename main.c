@@ -10,6 +10,9 @@ int main() {
     int *size;
     size = &num_of_vertices;
     int first_graph = 1;
+    int counter = 0 ;
+    pnode *arr;
+    arr= (pnode*)malloc(sizeof (pnode)*20);
     pnode to_delete =NULL;
     char menu = 1;
     while (menu != 'E') {
@@ -34,7 +37,8 @@ int main() {
                 break;
             case 'D':
                 to_delete = delete_node_cmd(&graph, size);
-
+                arr[counter]= to_delete;
+                counter++;
                 break;
 
             case 'S':
@@ -62,9 +66,12 @@ int main() {
             }
         }
         if (to_delete != NULL) {
-            free(to_delete);
-        }
+            for (int i = 0; i < counter ; i++){
+                free(arr[i]);
+            }
 
+        }
+    free(arr);
     free(graph);
 
 
