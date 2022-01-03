@@ -263,7 +263,6 @@ pnode delete_node_cmd(pnode *head, int *ptrSize) {
     pnode newGraph;
     newGraph = (node *) malloc(sizeof(node) *300);
     pnode oldGraph = *head;
-    pnode save_start_of_old = *head;
     pedge currEdge;
     pnode node_to_copy;
     int node_to_del  ;
