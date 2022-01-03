@@ -120,11 +120,10 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
     scanf("%d", &keyNode);
     pnode check = *head;
     pnode curr;
-    pnode graph = *head;
     pedge newEdge;
     pedge currEdge, tempEdge;
     for (int i = 0; i < size_g; i++) {
-        check = graph + i;
+        check = *head + i;
         if (check->node_num == keyNode) {
             savePos = i;
             flag = 1;
@@ -135,7 +134,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
 
     if (flag) {
-        curr = graph + savePos;
+        curr = *head + savePos;
         currEdge = curr->edges;
 
         while (currEdge != NULL) {
@@ -152,7 +151,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
                     currEdge = (edge *) malloc(sizeof(edge));
                     curr->edges = currEdge;
-                    currEdge->endpoint = (graph + (menu - '0'));
+                    currEdge->endpoint = (*head + (menu - '0'));
                     scanf(" %d", &weight);
                     currEdge->weight = weight;
                     isFirst = 0;
@@ -162,7 +161,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     currEdge->next = newEdge;
 
                     for (int i = 0; i < size_g; i++) {
-                        check = graph + i;
+                        check = *head + i;
                         if (check->node_num == (menu - '0')) {
                             savePos = i;
                             break;
@@ -170,7 +169,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
                     }
 
-                    newEdge->endpoint = (graph + savePos);
+                    newEdge->endpoint = (*head + savePos);
                     scanf(" %d", &weight);
                     newEdge->weight = weight;
                     newEdge->next=NULL;
@@ -178,7 +177,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                 }
 
             } else {
-                *head = graph;
+                *head = *head;
                 *ptrSize = size_g;
                 return menu;
             }
@@ -190,7 +189,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
     } else {
 
-        curr = graph + size_g;
+        curr = *head + size_g;
         curr->node_num = keyNode;
         pedge currEdge;
         scanf(" %c", &menu);
@@ -201,7 +200,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
 
                     currEdge = (edge *) malloc(sizeof(edge));
                     curr->edges = currEdge;
-                    currEdge->endpoint = (graph + (menu - '0'));
+                    currEdge->endpoint = (*head + (menu - '0'));
                     scanf(" %d", &weight);
                     currEdge->weight = weight;
                     isFirst = 0;
@@ -211,14 +210,14 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     newEdge->next= NULL;
                     newEdge->endpoint=NULL;
                     currEdge->next = newEdge;
-                    newEdge->endpoint = (graph + (menu - '0'));
+                    newEdge->endpoint = (*head + (menu - '0'));
                     scanf(" %d", &weight);
                     newEdge->weight = weight;
 
                 }
 
             } else {
-                *head = graph;
+                *head = *head;
                 *ptrSize = size_g + 1;
                 return menu;
             }
@@ -259,14 +258,14 @@ void printGraph_cmd(pnode head, int *ptrSize) {
 }
 
 // A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2 B 5 3 9 D 2 E
-void delete_node_cmd(pnode *head, int *ptrSize) {
+pnode delete_node_cmd(pnode *head, int *ptrSize) {
     int size_g = *ptrSize, k = 0;
     size_g--;
     pnode newGraph;
-    newGraph = (node *) malloc(sizeof(node) * (size_g));
+    newGraph = (node *) malloc(sizeof(node) *300);
     pnode oldGraph = *head;
     pnode save_start_of_old = *head;
-
+    pedge currEdge;
     pnode node_to_copy;
     int node_to_del  ;
     scanf(" %d", &node_to_del);
@@ -292,12 +291,19 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
                     free(tempEdge);
                 }
             }
-
             newGraph[k] = *node_to_copy;
+            newGraph[k].node_num =node_to_copy->node_num;
+            newGraph[k].edges =node_to_copy->edges;
             k++;
 
 
         } else {
+            currEdge = oldGraph[k].edges;
+            while (currEdge != NULL) {
+                tempEdge = currEdge;
+                currEdge = currEdge->next;
+                free(tempEdge);
+            }
             continue;
         }
 
@@ -306,7 +312,8 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
 
     *ptrSize = size_g;
     *head = newGraph;
-    free(save_start_of_old);
+    return oldGraph;
+
 
 
 }

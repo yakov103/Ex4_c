@@ -10,7 +10,7 @@ int main() {
     int *size;
     size = &num_of_vertices;
     int first_graph = 1;
-
+    pnode to_delete =NULL;
     char menu = 1;
     while (menu != 'E') {
         if (flag) {
@@ -21,6 +21,9 @@ int main() {
         switch (menu) {
             case 'A':
                 scanf(" %d", &num_of_vertices);
+                if (!first_graph){
+
+                }
                 menu = build_graph_cmd(&graph, size, first_graph);
                 first_graph = 0;
                 flag = 0;
@@ -30,7 +33,7 @@ int main() {
                 flag = 0;
                 break;
             case 'D':
-                delete_node_cmd(&graph, size);
+                to_delete = delete_node_cmd(&graph, size);
 
                 break;
 
@@ -46,18 +49,24 @@ int main() {
 
 
     }
-     printGraph_cmd(graph,size);
+
     pedge currEdge;
     pedge tempEdge;
-    for (int z = 0; z < num_of_vertices; z++) {
-        currEdge = (graph + z)->edges;
-        while (currEdge != NULL) {
-            tempEdge = currEdge;
-            currEdge = currEdge->next;
-            free(tempEdge);
+
+        for (int z = 0; z < num_of_vertices; z++) {
+            currEdge = (graph + z)->edges;
+            while (currEdge != NULL) {
+                tempEdge = currEdge;
+                currEdge = currEdge->next;
+                free(tempEdge);
+            }
         }
-    }
+        if (to_delete != NULL) {
+            free(to_delete);
+        }
+
     free(graph);
+
 
 
     return 0;

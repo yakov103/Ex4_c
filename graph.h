@@ -20,7 +20,7 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph);
 
 char insert_node_cmd(pnode *head, int *ptrSize);
 
-void delete_node_cmd(pnode *head, int *ptrSize);
+pnode delete_node_cmd(pnode *head, int *ptrSize);
 
 void printGraph_cmd(pnode head, int *ptrSize); //for self debug
 void deleteGraph_cmd(pnode *head);
