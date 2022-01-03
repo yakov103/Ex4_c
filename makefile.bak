@@ -1,0 +1,13 @@
+all:graph
+
+graph:main.o graph.o
+  gcc -Wall -Werror -g -o graph main.o graph.o
+
+main.o:main.c
+  gcc -Wall -Werror -g -c main.c
+
+graph.o:graph.c graph.h
+  gcc -Wall -Werror -g -c graph.c
+
+clean:
+  rm -fr *.o *.a *.so graph
