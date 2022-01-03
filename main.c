@@ -15,7 +15,7 @@ int main() {
     arr= (pnode*)malloc(sizeof (pnode)*20);
     pnode to_delete =NULL;
     char menu = 1;
-    while (menu != 'E') {
+    while (menu != EOF) {
         if (flag) {
             scanf(" %c", &menu);
         } else {
