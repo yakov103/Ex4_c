@@ -263,9 +263,9 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
     int size_g = *ptrSize, k = 0;
     size_g--;
     pnode newGraph;
-    newGraph = (node *) malloc(sizeof(node) * 300);
+    newGraph = (node *) malloc(sizeof(node) * (size_g));
     pnode oldGraph = *head;
-
+    pnode save_start_of_old = *head;
 
     pnode node_to_copy;
     int node_to_del  ;
@@ -294,7 +294,7 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
             }
 
             newGraph[k] = *node_to_copy;
-           k++;
+            k++;
 
 
         } else {
@@ -306,7 +306,7 @@ void delete_node_cmd(pnode *head, int *ptrSize) {
 
     *ptrSize = size_g;
     *head = newGraph;
-
+    free(save_start_of_old);
 
 
 }
