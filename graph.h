@@ -1,6 +1,7 @@
 #ifndef GRAPH_
 #define GRAPH_
-
+#define True 1
+#define False 0
 typedef struct GRAPH_NODE_ *pnode;;
 
 typedef struct edge_ {

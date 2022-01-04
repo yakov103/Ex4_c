@@ -6,15 +6,23 @@
 int main() {
     pnode graph;
     graph = (node *) malloc(sizeof(node));
-    int num_of_vertices, flag = 1;
+    if ( graph == NULL ){
+        printf("failed to allocate memory !! ");
+        return 1;
+    }
+    int num_of_vertices, flag = True;
     int *size;
     size = &num_of_vertices;
-    int first_graph = 1;
+    int first_graph = True;
     int counter = 0 ;
     pnode *arr;
-    arr= (pnode*)malloc(sizeof (pnode)*20);
+    arr= (pnode*)malloc(sizeof (pnode)*50);
+    if ( arr == NULL ){
+        printf("failed to allocate memory !! ");
+        return 1;
+    }
     pnode to_delete =NULL;
-    char menu = 1;
+    char menu = True;
 
     while (menu != EOF || menu != '\n' || menu != '\0') {
         if (flag) {
@@ -23,7 +31,7 @@ int main() {
            break;
             }
         } else {
-            flag = 1;
+            flag = True;
             if (menu == EOF || menu == '\n'|| menu == '\0'){
                 break;
             }
