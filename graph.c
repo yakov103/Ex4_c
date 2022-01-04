@@ -42,6 +42,10 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
     }
     free(graph);
     graph = (node *) malloc(sizeof(node) * 300);
+    if ( graph == NULL ){
+        printf("failed to allocate memory !! ");
+        return -1;
+    }
     pnode currentNode = graph;
 
 
@@ -55,10 +59,9 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
     int keyNode, weight, destNode, flag = 1;
     while (menu) {
         if (flag) {
-            scanf(" %c", &menu);
+            scanf("%c", &menu);
             if (menu == ' '){
-                scanf(" %c", &menu);
-                printf("test");
+                scanf("%c", &menu);
             }
         } else {
             flag = 1;
@@ -69,8 +72,15 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
                 currentNode = (graph + keyNode);
                 pedge currEdge;
                 currEdge = (edge *) malloc(sizeof(edge));
+                if ( currEdge == NULL ){
+            printf("failed to allocate memory !! ");
+            return -1;
+        }
                 currentNode->edges = currEdge;
-                scanf(" %c", &menu);
+                scanf("%c", &menu);
+                if (menu == ' '){
+                    scanf("%c", &menu);
+                }
                 if (isdigit(menu)) {
                     destNode = menu - '0';
                     currEdge->endpoint = (graph + destNode);
@@ -89,6 +99,10 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
                 if (isdigit(menu)) {
 
                     newEdge = (edge *) malloc(sizeof(edge));
+                    if ( newEdge == NULL ){
+                        printf("failed to allocate memory !! ");
+                        return -1;
+                    }
                     newEdge->next = NULL;
                     newEdge->endpoint = NULL;
                     currEdge->next = newEdge;
@@ -152,7 +166,6 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
         while (1) {
             if (isdigit(menu)) {
                 if (isFirst) {
-
                     currEdge = (edge *) malloc(sizeof(edge));
                     curr->edges = currEdge;
                     currEdge->endpoint = (*head + (menu - '0'));
@@ -185,7 +198,10 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                 *ptrSize = size_g;
                 return menu;
             }
-            scanf(" %c", &menu);
+            scanf("%c", &menu);
+            if ( menu == ' '){
+                scanf("%c",&menu);
+            }
 
 
         }
@@ -225,7 +241,10 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                 *ptrSize = size_g + 1;
                 return menu;
             }
-            scanf(" %c", &menu);
+            scanf("%c", &menu);
+            if ( menu == ' '){
+                scanf("%c",&menu);
+            }
 
 
         }
