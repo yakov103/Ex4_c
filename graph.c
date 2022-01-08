@@ -44,7 +44,7 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
     graph = (node *) malloc(sizeof(node) * 300);
     if ( graph == NULL ){
         printf("failed to allocate memory !! ");
-        return -1;
+        exit(1);
     }
     pnode currentNode = graph;
 
@@ -74,7 +74,7 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
                 currEdge = (edge *) malloc(sizeof(edge));
                 if ( currEdge == NULL ){
             printf("failed to allocate memory !! ");
-            return -1;
+                    exit(1);
         }
                 currentNode->edges = currEdge;
                 scanf("%c", &menu);
@@ -101,7 +101,7 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
                     newEdge = (edge *) malloc(sizeof(edge));
                     if ( newEdge == NULL ){
                         printf("failed to allocate memory !! ");
-                        return -1;
+                        exit(1);
                     }
                     newEdge->next = NULL;
                     newEdge->endpoint = NULL;
@@ -170,7 +170,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     currEdge = (edge *) malloc(sizeof(edge));
                     if ( currEdge == NULL ){
                         printf("failed to allocate memory !! ");
-                        return -1;
+                        exit(1);
                     }
                     curr->edges = currEdge;
                     currEdge->endpoint = (*head + (menu - '0'));
@@ -182,7 +182,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     newEdge = (edge *) malloc(sizeof(edge));
                     if ( newEdge == NULL ){
                         printf("failed to allocate memory !! ");
-                        return -1;
+                        exit(1);
                     }
                     currEdge->next = newEdge;
 
@@ -230,7 +230,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     currEdge = (edge *) malloc(sizeof(edge));
                     if ( currEdge == NULL ){
                         printf("failed to allocate memory !! ");
-                        exit(0);
+                        exit(1);
                     }
                     curr->edges = currEdge;
                     currEdge->endpoint = (*head + (menu - '0'));
@@ -243,7 +243,7 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     newEdge = (edge *) malloc(sizeof(edge));
                     if ( newEdge == NULL ){
                         printf("failed to allocate memory !! ");
-                        exit(0);
+                        exit(1);
                     }
                     newEdge->next= NULL;
                     newEdge->endpoint=NULL;
@@ -305,7 +305,7 @@ pnode delete_node_cmd(pnode *head, int *ptrSize) {
     newGraph = (node *) malloc(sizeof(node) *300);
     if ( newGraph == NULL ){
         printf("failed to allocate memory !! ");
-        return NULL;
+        exit(1);
     }
     pnode oldGraph = *head;
     pedge currEdge;
@@ -369,7 +369,7 @@ void shortsPath_cmd(pnode head, int *ptrSize) {
     dijkstra_matrix = (int *) malloc(sizeof(int) * size_g * size_g);
     if ( dijkstra_matrix == NULL ){
         printf("failed to allocate memory !! ");
-        return ;
+        exit(1);
     }
     for (int i = 0; i < size_g * size_g; i++) {
         dijkstra_matrix[i] = INFTY;
@@ -471,7 +471,7 @@ void TSP_cmd(pnode head, int *ptrSize){
     dijkstra_matrix = (int *) malloc(sizeof(int) * size_g * size_g);
     if ( dijkstra_matrix == NULL ){
         printf("failed to allocate memory !! ");
-        return  ;
+        exit(1);
 
     }
     for (int i = 0; i < size_g * size_g; i++) {
@@ -541,7 +541,7 @@ void TSP_cmd(pnode head, int *ptrSize){
     tsp_array = (int*) malloc(sizeof(int)*timesToRun);
     if ( tsp_array == NULL ){
         printf("failed to allocate memory !! ");
-        return ;
+        exit(1);
     }
     for (int i = 0 ; i < timesToRun ; i++){
         scanf(" %d",&tsp_array[i]);
@@ -558,13 +558,13 @@ void TSP_cmd(pnode head, int *ptrSize){
     tsp_permutations = malloc(sizeof(int*)*factorial_permutation);
     if ( tsp_permutations == NULL ){
         printf("failed to allocate memory !! ");
-        return;
+        exit(1);
     }
     for (int i =0 ; i < factorial_permutation ; i ++) {
         tsp_permutations[i]= (int*)malloc (sizeof(int)* timesToRun);
         if ( tsp_permutations[i] == NULL ){
             printf("failed to allocate memory !! ");
-            return ;
+            exit(1);
         }
     }
 
@@ -664,14 +664,14 @@ void perminit(char *s) {
     perm=(char *)malloc((plen+1)*sizeof(char));
     if ( perm == NULL ){
         printf("failed to allocate memory !! ");
-        return ;
+        exit(1);
     }
     perm[plen]=0;
 
     poly=(char *)malloc((plen+1)*sizeof(char));
     if ( poly == NULL ){
         printf("failed to allocate memory !! ");
-        return ;
+        exit(1);
     }
 
     // poly is a byte array that we are going to use as a big counter 

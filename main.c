@@ -8,7 +8,7 @@ int main() {
     graph = (node *) malloc(sizeof(node));
     if ( graph == NULL ){
         printf("failed to allocate memory !! ");
-        return 1;
+        exit(1);
     }
     int num_of_vertices, flag = True;
     int *size;
