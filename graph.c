@@ -132,10 +132,11 @@ char build_graph_cmd(pnode *head, int *ptrSize, int first_graph) {
 //    A 4 n 0 1 1 2 2 n 2 0 0 1 1 n 1 3 3 0 0 n 3 B 5 3 3 E
 char insert_node_cmd(pnode *head, int *ptrSize) {
     int size_g = *ptrSize;
-
     int keyNode, flag = 0, weight, isFirst = 1, savePos;
     char menu;
+
     scanf("%d", &keyNode);
+
     pnode check = *head;
     pnode curr;
     pedge newEdge;
@@ -229,19 +230,20 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                     currEdge = (edge *) malloc(sizeof(edge));
                     if ( currEdge == NULL ){
                         printf("failed to allocate memory !! ");
-                        return -1;
+                        exit(0);
                     }
                     curr->edges = currEdge;
                     currEdge->endpoint = (*head + (menu - '0'));
                     scanf(" %d", &weight);
                     currEdge->weight = weight;
+                    currEdge->next = NULL;
                     isFirst = 0;
                 } else {
 
                     newEdge = (edge *) malloc(sizeof(edge));
                     if ( newEdge == NULL ){
                         printf("failed to allocate memory !! ");
-                        return -1;
+                        exit(0);
                     }
                     newEdge->next= NULL;
                     newEdge->endpoint=NULL;
@@ -253,7 +255,6 @@ char insert_node_cmd(pnode *head, int *ptrSize) {
                 }
 
             } else {
-                *head = *head;
                 *ptrSize = size_g + 1;
                 return menu;
             }

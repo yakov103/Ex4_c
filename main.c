@@ -19,7 +19,7 @@ int main() {
     arr= (pnode*)malloc(sizeof (pnode)*50);
     if ( arr == NULL ){
         printf("failed to allocate memory !! ");
-        return 1;
+        exit(1);
     }
     pnode to_delete =NULL;
     char menu = True;
@@ -72,6 +72,11 @@ int main() {
 
         for (int z = 0; z < num_of_vertices; z++) {
             currEdge = (graph + z)->edges;
+
+            if (currEdge != NULL && currEdge->next == NULL ){
+            free(currEdge);
+            continue;
+            }
             while (currEdge != NULL) {
                 tempEdge = currEdge;
                 currEdge = currEdge->next;
